@@ -50,14 +50,14 @@ if CANARY_AVAILABLE:
         CANARY_AVAILABLE = False
 
 # Fish Speech API configuration (assuming local API server)
-FISH_SPEECH_API_URL = "http://127.0.0.1:8080"
+FISH_SPEECH_API_URL = "http://localhost:8080"
 
 def check_fish_speech_api():
     """Check if Fish Speech API server is running"""
     if not FISH_SPEECH_AVAILABLE:
         return False
     try:
-        response = requests.get(f"{FISH_SPEECH_API_URL}/docs", timeout=2)
+        response = requests.get(f"{FISH_SPEECH_API_URL}/", timeout=2)
         return response.status_code == 200
     except:
         return False
