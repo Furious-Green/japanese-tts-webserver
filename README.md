@@ -60,7 +60,11 @@ uv sync
 
 1. Start the server:
 ```bash
+# Option 1: Using the main script
 uv run python main.py
+
+# Option 2: Using uvicorn directly
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 2. Open your browser and navigate to `http://localhost:8000`
@@ -77,12 +81,13 @@ uv run python main.py
 
 To use Fish Speech, you need to run a separate API server:
 
-1. Install Fish Speech following their documentation
+1. Clone the Fish Speech repository and set it up as mentioned in its README
 2. Start the API server:
 ```bash
 python -m tools.api_server --listen 0.0.0.0:8080 \
   --llama-checkpoint-path "checkpoints/openaudio-s1-mini" \
-  --decoder-checkpoint-path "checkpoints/openaudio-s1-mini/codec.pth"
+  --decoder-checkpoint-path "checkpoints/openaudio-s1-mini/codec.pth" \
+  --decoder-config-name modded_dac_vq
 ```
 3. The web interface will automatically detect the running API server
 
