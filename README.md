@@ -89,11 +89,10 @@ sudo apt install portaudio19-dev libsox-dev ffmpeg
 3. Download the model weights:
 ```bash
 # First install huggingface_hub CLI
-pip install huggingface_hub[cli]
-# Or: uv tool install huggingface_hub[cli]
+uv tool install huggingface_hub[cli]
 
 # Download the OpenAudio S1-mini model weights
-hf download fishaudio/openaudio-s1-mini --local-dir checkpoints/openaudio-s1-mini
+uvx --from huggingface_hub[cli] hf download fishaudio/openaudio-s1-mini --local-dir checkpoints/openaudio-s1-mini
 ```
 
 4. Start the Fish Speech API server:
