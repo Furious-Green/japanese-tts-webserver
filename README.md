@@ -35,6 +35,24 @@ A FastAPI-based web server for Japanese Text-to-Speech synthesis supporting mult
 - CUDA-compatible GPU (recommended)
 - UV package manager
 
+### System Requirements
+
+**GPU/VRAM Requirements (recommended):**
+- **Parler TTS (Mini)**: ~2-4 GB VRAM
+- **Canary TTS (0.5B)**: ~4-6 GB VRAM
+- **Fish Speech (S1-mini)**: ~4 GB VRAM minimum, 12 GB VRAM recommended for optimal performance
+- **Total (all models)**: 12-16 GB VRAM recommended if loading multiple models
+
+**CPU-only mode:** All models can run on CPU but will be significantly slower
+
+**Disk Space:**
+- **Parler TTS**: ~1-2 GB
+- **Canary TTS**: ~2-3 GB
+- **Fish Speech**: ~1 GB (S1-mini) or ~8 GB (S1 full)
+- **Total**: ~5-10 GB minimum for model downloads and cache
+
+**Initial Setup:** First run will download models from Hugging Face, which may take 10-30 minutes depending on your internet connection.
+
 ## Installation
 
 1. Clone the repository:
