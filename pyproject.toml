@@ -10,7 +10,6 @@ dependencies = [
     "pyrootutils>=1.0.4",
     "python-multipart>=0.0.20",
     "requests>=2.32.4",
-    "rubyinserter>=0.1",
     "soundfile>=0.12.1",
     "torch>=2.0.0",
     "torchaudio>=2.7.1",

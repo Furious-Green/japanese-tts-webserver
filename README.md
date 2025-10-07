@@ -66,10 +66,16 @@ cd japanese-tts-webserver
 uv sync
 ```
 
-3. Install additional dependencies (optional):
+3. Install additional dependencies:
 ```bash
-# For Canary TTS - install canary-tts manually if needed
-# For Fish Speech - requires separate installation and API server setup:
+# For Parler TTS - requires manual installation from GitHub
+uv pip install git+https://github.com/huggingface/parler-tts.git
+uv pip install git+https://github.com/getuka/RubyInserter.git
+
+# For Canary TTS (optional) - requires manual installation from GitHub
+uv pip install git+https://github.com/getuka/canary-tts.git
+
+# For Fish Speech (optional) - requires separate installation and API server setup:
 # Follow instructions at: https://github.com/fishaudio/fish-speech
 # System dependencies: apt install portaudio19-dev libsox-dev ffmpeg
 ```
