@@ -205,7 +205,7 @@ async def generate_speech(prompt: str = Form(...), description: str = Form(...),
         elif model == "fish" and FISH_SPEECH_API_RUNNING:
             # Fish Speech API generation
             api_data = {
-                "text": prompt_with_ruby,
+                "text": prompt,
                 "reference_text": description,
                 "reference_audio": None,  # Could be enhanced to support reference audio upload
                 "max_new_tokens": 256,
