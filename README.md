@@ -39,8 +39,8 @@ A FastAPI-based web server for Japanese Text-to-Speech synthesis supporting mult
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd parlertts
+git clone https://github.com/Furious-Green/japanese-tts-webserver.git
+cd japanese-tts-webserver
 ```
 
 2. Install dependencies using UV:
