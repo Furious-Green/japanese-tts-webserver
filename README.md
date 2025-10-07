@@ -68,9 +68,11 @@ uv sync
 
 3. Install additional dependencies:
 ```bash
+# Required for Parler TTS and Canary TTS
+uv pip install git+https://github.com/getuka/RubyInserter.git
+
 # For Parler TTS - requires manual installation from GitHub
 uv pip install git+https://github.com/huggingface/parler-tts.git
-uv pip install git+https://github.com/getuka/RubyInserter.git
 
 # For Canary TTS (optional) - requires manual installation from GitHub
 uv pip install git+https://github.com/getuka/canary-tts.git
