@@ -65,7 +65,7 @@ def check_fish_speech_api():
     try:
         response = requests.get(f"{FISH_SPEECH_API_URL}/", timeout=2)
         return response.status_code == 200
-    except:
+    except Exception:
         return False
 
 
