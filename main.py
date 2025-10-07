@@ -149,7 +149,7 @@ async def home():
             }} else if (model === 'fish') {{
                 info.innerHTML = 'Fish Speech: Supports emotion markers like (angry), (sad), (excited). Add reference audio description for voice cloning.';
                 description.placeholder = 'Reference audio description or voice characteristics...';
-                description.value = 'A clear female voice with natural intonation. You can add emotion markers like (excited) or (sad) in your text.';
+                description.value = 'A clear female voice with natural intonation.';
             }}
         }}
         </script>
