@@ -4,9 +4,8 @@ from parler_tts import ParlerTTSForConditionalGeneration
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import soundfile as sf
 from rubyinserter import add_ruby
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Form
 from fastapi.responses import FileResponse, HTMLResponse
-from fastapi.staticfiles import StaticFiles
 import os
 import tempfile
 import uuid
@@ -30,9 +29,12 @@ app = FastAPI()
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 # Load Parler TTS models
-parler_model = ParlerTTSForConditionalGeneration.from_pretrained("2121-8/japanese-parler-tts-mini").to(device)
-parler_prompt_tokenizer = AutoTokenizer.from_pretrained("2121-8/japanese-parler-tts-mini", subfolder="prompt_tokenizer")
-parler_description_tokenizer = AutoTokenizer.from_pretrained("2121-8/japanese-parler-tts-mini", subfolder="description_tokenizer")
+parler_model = ParlerTTSForConditionalGeneration.from_pretrained(
+    "2121-8/japanese-parler-tts-mini").to(device)
+parler_prompt_tokenizer = AutoTokenizer.from_pretrained(
+    "2121-8/japanese-parler-tts-mini", subfolder="prompt_tokenizer")
+parler_description_tokenizer = AutoTokenizer.from_pretrained(
+    "2121-8/japanese-parler-tts-mini", subfolder="description_tokenizer")
 
 # Load Canary TTS models (if available)
 canary_model = None
@@ -41,8 +43,11 @@ canary_codec = None
 
 if CANARY_AVAILABLE:
     try:
-        canary_tokenizer = AutoTokenizer.from_pretrained("2121-8/canary-tts-0.5b")
-        canary_model = AutoModelForCausalLM.from_pretrained("2121-8/canary-tts-0.5b", device_map="auto", torch_dtype=torch.bfloat16)
+        canary_tokenizer = AutoTokenizer.from_pretrained(
+            "2121-8/canary-tts-0.5b")
+        canary_model = AutoModelForCausalLM.from_pretrained(
+            "2121-8/canary-tts-0.5b", device_map="auto",
+            torch_dtype=torch.bfloat16)
         canary_codec = XCodec2Model.from_pretrained("HKUSTAudio/xcodec2")
         print("Canary TTS models loaded successfully")
     except Exception as e:
@@ -51,6 +56,7 @@ if CANARY_AVAILABLE:
 
 # Fish Speech API configuration (assuming local API server)
 FISH_SPEECH_API_URL = "http://localhost:8080"
+
 
 def check_fish_speech_api():
     """Check if Fish Speech API server is running"""
@@ -62,17 +68,28 @@ def check_fish_speech_api():
     except:
         return False
 
-FISH_SPEECH_API_RUNNING = check_fish_speech_api() if FISH_SPEECH_AVAILABLE else False
+
+if FISH_SPEECH_AVAILABLE:
+    FISH_SPEECH_API_RUNNING = check_fish_speech_api()
+else:
+    FISH_SPEECH_API_RUNNING = False
 if FISH_SPEECH_AVAILABLE and FISH_SPEECH_API_RUNNING:
     print("Fish Speech API server detected")
 elif FISH_SPEECH_AVAILABLE:
     print("Fish Speech dependencies available but API server not running")
 
+
 @app.get("/", response_class=HTMLResponse)
 async def home():
-    canary_option = '<option value="canary">Canary TTS</option>' if CANARY_AVAILABLE else '<option value="canary" disabled>Canary TTS (Not Available)</option>'
-    fish_option = '<option value="fish">Fish Speech</option>' if (FISH_SPEECH_AVAILABLE and FISH_SPEECH_API_RUNNING) else '<option value="fish" disabled>Fish Speech (Not Available)</option>'
-    
+    if CANARY_AVAILABLE:
+        canary_option = '<option value="canary">Canary TTS</option>'
+    else:
+        canary_option = '<option value="canary" disabled>Canary TTS (Not Available)</option>'
+    if (FISH_SPEECH_AVAILABLE and FISH_SPEECH_API_RUNNING):
+        fish_option = '<option value="fish">Fish Speech</option>'
+    else:
+        fish_option = '<option value="fish" disabled>Fish Speech (Not Available)</option>'
+
     return f"""
     <!DOCTYPE html>
     <html>
@@ -114,13 +131,13 @@ async def home():
             </div>
             <input type="submit" value="Generate Speech">
         </form>
-        
+
         <script>
         function updateDescription() {{
             const model = document.getElementById('model').value;
             const info = document.getElementById('model-info');
             const description = document.getElementById('description');
-            
+
             if (model === 'parler') {{
                 info.innerHTML = 'Parler TTS: Uses separate voice description for fine-grained control over voice characteristics.';
                 description.placeholder = 'Describe the voice characteristics...';
@@ -140,22 +157,26 @@ async def home():
     </html>
     """
 
+
 @app.post("/generate")
 async def generate_speech(prompt: str = Form(...), description: str = Form(...), model: str = Form("parler")):
     prompt_with_ruby = add_ruby(prompt)
     filename = f"tts_{uuid.uuid4().hex}.wav"
     filepath = os.path.join(tempfile.gettempdir(), filename)
-    
+
     try:
         if model == "parler":
             # Parler TTS generation
-            input_ids = parler_description_tokenizer(description, return_tensors="pt").input_ids.to(device)
-            prompt_input_ids = parler_prompt_tokenizer(prompt_with_ruby, return_tensors="pt").input_ids.to(device)
-            
-            generation = parler_model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
+            input_ids = parler_description_tokenizer(
+                description, return_tensors="pt").input_ids.to(device)
+            prompt_input_ids = parler_prompt_tokenizer(
+                prompt_with_ruby, return_tensors="pt").input_ids.to(device)
+
+            generation = parler_model.generate(
+                input_ids=input_ids, prompt_input_ids=prompt_input_ids)
             audio_arr = generation.cpu().numpy().squeeze()
             sf.write(filepath, audio_arr, parler_model.config.sampling_rate)
-            
+
         elif model == "canary" and CANARY_AVAILABLE:
             # Canary TTS generation
             chat = [
@@ -163,9 +184,9 @@ async def generate_speech(prompt: str = Form(...), description: str = Form(...),
                 {"role": "user", "content": prompt_with_ruby}
             ]
             tokenized_input = canary_tokenizer.apply_chat_template(
-                chat, add_generation_prompt=True, tokenize=True, return_tensors="pt"
-            ).to(canary_model.device)
-            
+                chat, add_generation_prompt=True, tokenize=True,
+                return_tensors="pt").to(canary_model.device)
+
             with torch.no_grad():
                 output = canary_model.generate(
                     tokenized_input,
@@ -174,11 +195,13 @@ async def generate_speech(prompt: str = Form(...), description: str = Form(...),
                     temperature=0.7,
                     repetition_penalty=1.05,
                 )[0]
-            
+
             audio_tokens = output[len(tokenized_input[0]):]
-            output_audios = canary_codec.decode_code(audio_tokens.unsqueeze(0).unsqueeze(0).cpu())
-            torchaudio.save(filepath, src=output_audios[0].cpu(), sample_rate=16000)
-            
+            output_audios = canary_codec.decode_code(
+                audio_tokens.unsqueeze(0).unsqueeze(0).cpu())
+            torchaudio.save(
+                filepath, src=output_audios[0].cpu(), sample_rate=16000)
+
         elif model == "fish" and FISH_SPEECH_API_RUNNING:
             # Fish Speech API generation
             api_data = {
@@ -190,17 +213,18 @@ async def generate_speech(prompt: str = Form(...), description: str = Form(...),
                 "temperature": 0.7,
                 "repetition_penalty": 1.05
             }
-            
-            response = requests.post(f"{FISH_SPEECH_API_URL}/v1/tts", json=api_data, timeout=60)
+
+            response = requests.post(
+                f"{FISH_SPEECH_API_URL}/v1/tts", json=api_data, timeout=60)
             if response.status_code == 200:
                 with open(filepath, 'wb') as f:
                     f.write(response.content)
             else:
                 raise ValueError(f"Fish Speech API error: {response.status_code} - {response.text}")
-            
+
         else:
             raise ValueError(f"Model '{model}' not available or not supported")
-    
+
     except Exception as e:
         return HTMLResponse(f"""
         <!DOCTYPE html>
@@ -225,7 +249,7 @@ async def generate_speech(prompt: str = Form(...), description: str = Form(...),
         </body>
         </html>
         """)
-    
+
     return HTMLResponse(f"""
     <!DOCTYPE html>
     <html>
@@ -258,6 +282,7 @@ async def generate_speech(prompt: str = Form(...), description: str = Form(...),
     </html>
     """)
 
+
 @app.get("/audio/{filename}")
 async def get_audio(filename: str):
     filepath = os.path.join(tempfile.gettempdir(), filename)
@@ -268,4 +293,3 @@ async def get_audio(filename: str):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-

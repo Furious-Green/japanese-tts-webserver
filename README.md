@@ -151,6 +151,49 @@ uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 MIT License - see [LICENSE](LICENSE) file for details
 
+## Credits
+
+This project uses the following models and libraries:
+
+- **Parler TTS** - [2121-8/japanese-parler-tts-mini](https://huggingface.co/2121-8/japanese-parler-tts-mini)
+- **Canary TTS** - [2121-8/canary-tts-0.5b](https://huggingface.co/2121-8/canary-tts-0.5b)
+- **Fish Speech** - [fishaudio/fish-speech](https://github.com/fishaudio/fish-speech) - OpenAudio S1 model
+- **Ruby Inserter** - Japanese text processing for improved pronunciation
+
+Special thanks to the model creators and the open-source community for making these tools available.
+
 ## Contributing
 
-[Add contribution guidelines here]
+Contributions are welcome! Here's how you can help:
+
+### Reporting Issues
+
+- Check if the issue already exists in the [Issues](https://github.com/Furious-Green/japanese-tts-webserver/issues) section
+- Provide clear description of the problem
+- Include steps to reproduce
+- Mention your environment (OS, Python version, GPU/CPU)
+
+### Submitting Pull Requests
+
+1. Fork the repository
+2. Create a new branch for your feature (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Test your changes thoroughly
+5. Commit your changes with clear commit messages
+6. Push to your branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request with a clear description of your changes
+
+### Code Style
+
+- Follow PEP 8 guidelines for Python code
+- Use meaningful variable and function names
+- Add comments for complex logic
+- Keep functions focused and concise
+
+### Areas for Contribution
+
+- Additional TTS model support
+- UI/UX improvements
+- Performance optimizations
+- Documentation improvements
+- Bug fixes and error handling
