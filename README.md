@@ -149,7 +149,7 @@ uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 ## License
 
-[Add your license here]
+MIT License - see [LICENSE](LICENSE) file for details
 
 ## Contributing
 
