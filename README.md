@@ -2,6 +2,10 @@
 
 A FastAPI-based web server for Japanese Text-to-Speech synthesis supporting multiple TTS models.
 
+### About Furious Green
+
+[Furious Green](https://furiousgreen.co) is a Japan-based technology training company focused on AI, machine learning, and generative models. We build open tools and demos like this one to help engineers and researchers experiment with the latest AI technologies — in this case, Japanese Text-to-Speech models.
+
 ## Features
 
 - **Multi-Model Support**: Choose between Parler TTS, Canary TTS, and Fish Speech models
