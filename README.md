@@ -86,9 +86,20 @@ cd fish-speech
 sudo apt install portaudio19-dev libsox-dev ffmpeg
 ```
 
-3. Start the Fish Speech API server:
+3. Download the model weights:
 ```bash
-python -m tools.api_server --listen 0.0.0.0:8080 \
+# First install huggingface_hub CLI
+pip install huggingface_hub[cli]
+# Or: uv tool install huggingface_hub[cli]
+
+# Download the OpenAudio S1-mini model weights
+hf download fishaudio/openaudio-s1-mini --local-dir checkpoints/openaudio-s1-mini
+```
+
+4. Start the Fish Speech API server:
+```bash
+uv run --python 3.12 python -m tools.api_server \
+  --listen 0.0.0.0:8080 \
   --llama-checkpoint-path "checkpoints/openaudio-s1-mini" \
   --decoder-checkpoint-path "checkpoints/openaudio-s1-mini/codec.pth" \
   --decoder-config-name modded_dac_vq
