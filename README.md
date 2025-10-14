@@ -1,3 +1,5 @@
+[English](README.md) | [日本語](README.ja.md)
+
 # Japanese TTS Web Server
 
 A FastAPI-based web server for Japanese Text-to-Speech synthesis supporting multiple TTS models.
