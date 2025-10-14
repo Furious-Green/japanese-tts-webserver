@@ -74,7 +74,7 @@ uv sync
 #### Parler TTS（必須）
 
 ```bash
-uv pip install git+https://github.com/getuka/ RubyInserter.git
+uv pip install git+https://github.com/getuka/RubyInserter.git
 uv pip install git+https://github.com/huggingface/parler-tts.git
 ```
 
